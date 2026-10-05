@@ -1,0 +1,18 @@
+CREATE TABLE barang_uji AS
+SELECT * FROM barang;
+
+SELECT COUNT(*)
+FROM barang_uji
+WHERE id_kategori = 1;
+
+UPDATE barang_uji
+SET harga = ROUND(harga * 1.05, 2)
+WHERE id_kategori = 1;
+
+DELETE FROM barang_uji
+WHERE kode = 'BRG-010';
+
+UPDATE barang_uji
+SET harga = 0;
+
+DROP TABLE barang_uji;

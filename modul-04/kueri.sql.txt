@@ -1,0 +1,114 @@
+-- ==========================================
+-- MODUL 4 - KUERI DASAR DAN DML
+-- Basis Data PT KPN
+-- ==========================================
+
+
+-- SOAL 1
+-- Seluruh barang kategori Bahan Baku diurutkan berdasarkan nama
+SELECT b.kode,
+       b.nama,
+       b.harga
+FROM barang b
+JOIN kategori k ON k.id = b.id_kategori
+WHERE k.nama = 'Bahan Baku'
+ORDER BY b.nama;
+
+
+-- SOAL 2
+-- Barang dengan harga 50.000 sampai 200.000 diurutkan berdasarkan harga
+SELECT kode,
+       nama,
+       harga
+FROM barang
+WHERE harga BETWEEN 50000 AND 200000
+ORDER BY harga;
+
+
+-- SOAL 3
+-- Lima transaksi masuk terbaru
+SELECT id,
+       tanggal,
+       id_barang,
+       id_gudang,
+       id_pemasok,
+       jumlah,
+       harga_satuan
+FROM transaksi_masuk
+ORDER BY tanggal DESC
+LIMIT 5;
+
+
+-- SOAL 4
+-- Barang yang namanya mengandung kata "braket"
+SELECT kode,
+       nama,
+       harga
+FROM barang
+WHERE nama ILIKE '%braket%'
+ORDER BY nama;
+
+
+-- SOAL 5
+-- Jumlah barang, harga termurah, termahal, dan rata-rata
+SELECT COUNT(*) AS jml_barang,
+       MIN(harga) AS termurah,
+       MAX(harga) AS termahal,
+       ROUND(AVG(harga)) AS rerata
+FROM barang;
+
+
+-- SOAL 6
+-- Tiga transaksi keluar pertama dengan format tanggal tertentu
+SELECT id,
+       TO_CHAR(tanggal, 'DD Mon YYYY HH24:MI') AS tanggal,
+       id_barang,
+       id_gudang,
+       id_pelanggan,
+       jumlah
+FROM transaksi_keluar
+ORDER BY tanggal
+LIMIT 3;
+
+
+-- SOAL 7
+-- Memberikan label berdasarkan kelas harga
+SELECT kode,
+       nama,
+       harga,
+       CASE
+           WHEN harga >= 100000 THEN 'Mahal'
+           ELSE 'Terjangkau'
+       END AS kelas_harga
+FROM barang
+ORDER BY harga DESC;
+
+
+-- SOAL 8
+-- Menampilkan pemasok dan mengganti NULL pada telepon
+SELECT kode,
+       nama,
+       COALESCE(telepon, '(belum tercatat)') AS telepon
+FROM pemasok
+ORDER BY id;
+
+
+-- SOAL 9
+-- Jumlah transaksi dan total unit masuk selama Juni 2026
+SELECT COUNT(*) AS jumlah_transaksi,
+       SUM(jumlah) AS total_unit
+FROM transaksi_masuk
+WHERE tanggal >= '2026-06-01 00:00:00+07'
+  AND tanggal < '2026-07-01 00:00:00+07';
+
+
+-- SOAL 10
+-- Lima penerimaan dengan nilai terbesar
+SELECT id,
+       id_barang,
+       jumlah,
+       harga_satuan,
+       (jumlah * harga_satuan) AS nilai
+FROM transaksi_masuk
+ORDER BY nilai DESC
+LIMIT 5;
